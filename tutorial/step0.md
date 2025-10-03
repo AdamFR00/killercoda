@@ -36,7 +36,10 @@ With our Docker image successfully built, we will now run it as a container. Thi
 Start the container, mapping its internal port `5000` to your host machine's port `5000`. This allows you to access the application from your browser.
 
 ```bash
-docker run -d --name flask-app -p 5000:5000 flask-app
+docker run -d --name flask-app \
+  -p 5000:5000 \
+  --restart unless-stopped \
+  flask-app
 ```{{exec}}
 
 To verify that the container is running and active, use the following command:
