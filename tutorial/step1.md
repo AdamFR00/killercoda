@@ -1,4 +1,4 @@
-# Step 1: cAdvisor
+## Step 1: cAdvisor
 
 Before we can start visualizing our data in Grafana, we need to collect metrics from our running containers. While Prometheus can scrape any endpoint that exposes metrics, it doesn’t provide deep container insights by itself.
 ---
@@ -19,7 +19,7 @@ cAdvisor provides detailed resource usage and performance characteristics of run
    ```{{exec}}
 First we give cAdvisor Read-Only (:ro) access to some important directories on our machine using the ---volume command. Let's walk you through each instance:
 ```bash
---volume=/:/rootfs:ro 
+--volume=/:/rootfs:ro
 ```
 Gives access to the hosts root filesystem in order for cAdvisor to inspect files.
 ```bash
@@ -31,9 +31,9 @@ Gives access to the Docker socket & runtime info.
 ```
 Gives access to kernel system metrics (CPU, memory)
 ```bash
---volume=/var/lib/docker/:/var/lib/docker:ro 
+--volume=/var/lib/docker/:/var/lib/docker:ro
 ```
-This enables cAdvisor to view Docker container metadata. 
+This enables cAdvisor to view Docker container metadata.
 ```bash
 --publish=8080:8080
 ```

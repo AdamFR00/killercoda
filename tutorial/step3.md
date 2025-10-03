@@ -1,7 +1,9 @@
-# Step 3: Installing Grafana
+## Step 3: Installing Grafana
+
 In this step, we will install Grafana on within our virtual environment. Grafana is an open-source platform for monitoring and observability that allows you to create, explore, and share dashboards and data visualizations.
 
-## Installing Grafana
+### Installing Grafana
+
 1. Lets install Grafana via apt install.
     ```
     sudo apt-get install -y apt-transport-https software-properties-common wget &&

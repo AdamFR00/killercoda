@@ -1,8 +1,8 @@
-# Step 4: Provisioning Prometheus as a Grafana Data Source
+## Step 4: Provisioning Prometheus as a Grafana Data Source
 
 Now that both Grafana and Prometheus are running, we need to connect them. This involves configuring Grafana to know __where__ to find Prometheus so it can fetch and visualize the metrics Prometheus is collecting. We'll do this using a Grafana provisioning file.
 
-## Understanding Grafana Provisioning Files
+### Understanding Grafana Provisioning Files
 
 Grafana uses configuration files to automatically set up data sources, dashboards, and other settings when Grafana starts. This is known as "provisioning." For data sources, a `datasources.yml` file (or similar) tells Grafana:
 
@@ -18,7 +18,7 @@ Grafana uses configuration files to automatically set up data sources, dashboard
 
 The `prometheus_datasource.yml` file we are using is pre-configured to point to your Prometheus instance.
 
-## Apply the Prometheus Data Source Configuration
+### Apply the Prometheus Data Source Configuration
 
 We have already prepared a provisioning file for you. We'll move this file to Grafana's configuration directory and then restart the Grafana server to apply the changes.
 
