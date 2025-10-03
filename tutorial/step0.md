@@ -1,4 +1,4 @@
-# Step 0: Preparing the Application Environment
+## Step 0: Preparing the Application Environment
 
 
 Before we set up our monitoring stack (Prometheus, Grafana, cAdvisor), we first need a sample application to monitor. The application will be used to demonstrate the capabilities of our observability tools.
@@ -7,7 +7,7 @@ First, we'll prepare a simple Flask web application, encapsulating it within a D
 
 ---
 
-## 1. Setting Up the Flask Application Files
+### Setting Up the Flask Application Files
 
 Create a dedicated directory for our Flask application and copy the necessary files into it. These files include `app.py`, which contains our Flask application logic, and `Dockerfile`, which defines how to build the container image. For more information take a look at `assets/app.py`and `assets/Dockerfile`.
 
@@ -18,7 +18,7 @@ sudo cp /education/app.py /education/Dockerfile flask-app/
 
 ---
 
-## 2. Building the Flask App Docker Image
+### Building the Flask App Docker Image
 
 Now that the application files are in place, the next step is to build a Docker image. This image will package our Flask application with all its required dependencies into a single unit.
 
@@ -29,7 +29,7 @@ docker build -t flask-app .
 
 ---
 
-## 3. Running the Flask App in a Container
+### Running the Flask App in a Container
 
 With our Docker image successfully built, we will now run it as a container. This will spin up our Flask application in an isolated Docker environment.
 
@@ -50,21 +50,18 @@ docker ps
 
 ---
 
-## 4. Testing the Flask App Locally
+### Testing the Flask App Locally
 
-Before proceeding to set up the monitoring stack, we can confirm that our Flask application is accessible and functioning correctly:
-
-- **Access the main application page:** Visit [http://localhost:5000]({{TRAFFIC_HOST1_5000}})
-    - You should see the message: **“Flask app is running!”**
+Before proceeding to set up the monitoring stack, we can confirm that our Flask application is accessible and functioning correctly by visiting: **[http://localhost:5000]({{TRAFFIC_HOST1_5000}})**.
 
 ---
 
-## Next Steps
+### Next Steps
 
 We have now successfully prepared and deployed our sample Flask application in a Docker container.
 
 In the subsequent steps, we will proceed to build our container observability stack:
 
-1.  **Set up cAdvisor:**
-2.  **Configure Prometheus:**
-3.  **Install and Configure Grafana:**
+1.  **Set up cAdvisor**
+2.  **Configure Prometheus**
+3.  **Install and Configure Grafana**
