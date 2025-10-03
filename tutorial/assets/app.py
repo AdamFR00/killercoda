@@ -181,6 +181,75 @@ def cpu_stress():
     """
     return html
 
+
+@app.route("/easter-egg")
+def easter_egg():
+    html = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>🥚 Easter Egg</title>
+        <style>
+            body {
+                font-family: "Comic Sans MS", cursive, sans-serif;
+                background-color: #fff8dc;
+                text-align: center;
+                margin-top: 50px;
+            }
+            pre {
+                font-size: 14px;
+                color: #8b4513;
+                font-weight: bold;
+                line-height: 1.2em;
+            }
+            button {
+                background-color: #ff69b4;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                margin-top: 20px;
+                border-radius: 10px;
+                font-size: 16px;
+                cursor: pointer;
+                transition: transform 0.2s;
+            }
+            button:hover {
+                transform: scale(1.1);
+                background-color: #ff1493;
+            }
+            .hatched {
+                color: green;
+                font-size: 24px;
+                margin-top: 20px;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>🥚 You found the secret Easter Egg!</h1>
+        <pre>
+          ___
+         /   \\
+        |     |
+        |     |
+         \\___/
+        </pre>
+        <p>(Shhh... don't tell anyone 👀)</p>
+        <button onclick="hatchEgg()">Hatch the Egg!</button>
+        <div id="result"></div>
+
+        <script>
+            function hatchEgg() {
+                document.getElementById("result").innerHTML =
+                    '<div class="hatched">🐣 The egg hatched! Hello there!</div>';
+            }
+        </script>
+    </body>
+    </html>
+    """
+    return html
+
+
 if __name__ == "__main__":
     if os.name == "posix":
         multiprocessing.set_start_method("fork", force=True)
