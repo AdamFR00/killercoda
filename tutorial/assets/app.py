@@ -2,11 +2,77 @@ from flask import Flask
 import math
 import time
 import os
+import multiprocessing  # Import multiprocessing
+import threading  # Import threading for the /cpu-stress endpoint if needed
 
 app = Flask(__name__)
 
 stress_cycles = 0
-memory_chunks = []  # List to hold allocated memory
+# List to hold worker processes
+worker_processes = []
+# Event to signal workers to stop
+stop_event = threading.Event()  # Use threading.Event for graceful shutdown
+
+
+# Define the CPU intensive task for worker processes
+def cpu_intensive_task(iterations_per_second):
+    x = 1.0
+    y = 2.0
+    while not stop_event.is_set():  # Loop until the stop_event is set
+        # Perform a series of intensive mathematical operations
+        x = math.sin(x * y + 0.1) * math.cos(y / (x + 0.0001))
+        y = math.tan(x + y) + math.sqrt(abs(x * y) + 1e-6)
+
+        # Do a lot of these calculations to burn CPU
+        for _ in range(iterations_per_second // 4):  # Divide iterations by num_workers
+            a = 1.23456789
+            b = 9.87654321
+            a = math.sin(a * b) * math.cos(b / (a + 0.0001))
+            b = math.tan(a + b) + math.sqrt(abs(a * b) + 1e-6)
+            # If we have more iterations to do, continue
+
+
+# Function to manage worker processes
+def start_cpu_burners(num_workers, iterations_per_second):
+    global worker_processes
+    global stop_event
+
+    # Clear previous workers and stop event if they exist
+    if worker_processes:
+        stop_event.set()  # Signal existing workers to stop
+        for p in worker_processes:
+            p.join(timeout=2)  # Give them a moment to finish
+            if p.is_alive():
+                p.terminate()  # Force terminate if they don't stop
+        worker_processes = []
+        stop_event.clear()  # Reset the event for the new run
+
+    # Start new worker processes
+    for _ in range(num_workers):
+        p = multiprocessing.Process(
+            target=cpu_intensive_task, args=(iterations_per_second,)
+        )
+        p.start()
+        worker_processes.append(p)
+    print(f"Started {num_workers} CPU burner processes.")
+
+
+# Function to stop worker processes
+def stop_cpu_burners():
+    global worker_processes
+    global stop_event
+
+    if worker_processes:
+        print("Signaling CPU burners to stop...")
+        stop_event.set()  # Signal all workers to stop
+        for p in worker_processes:
+            p.join(timeout=5)  # Wait for them to finish gracefully
+            if p.is_alive():
+                print(f"Worker process {p.pid} did not stop gracefully, terminating.")
+                p.terminate()  # Force terminate if they don't stop
+        worker_processes = []
+        stop_event.clear()  # Reset the event
+        print("All CPU burner processes stopped.")
 
 
 @app.route("/")
@@ -21,41 +87,33 @@ def cpu_stress():
     stress_cycles += 1
 
     start_time = time.time()
-    duration = 20
-    end_time = start_time + duration
+    duration = 20  # seconds for the stress to run
 
-    # Number of calculations to perform per second
-    # Adjust this value for more or less CPU load
-    calculations_per_second = 200000  # High number of operations
+    # Determine number of workers based on available cores
+    num_workers = multiprocessing.cpu_count()
+    if num_workers is None or num_workers == 0:  # Fallback if cpu_count fails
+        num_workers = 4
 
-    # Initialize variables outside the inner loop
-    a = 1.0
-    b = 2.0
+    # Total calculations to aim for over the duration
+    # More iterations = more load. Distribute this across workers.
+    total_iterations = (
+        50000000  # Aim for 50 million calculations *per worker* over the duration
+    )
 
-    while time.time() < end_time:
-        for _ in range(calculations_per_second):
-            # Perform a series of intensive mathematical operations
-            # Focus on operations that are CPU bound and avoid edge cases for log/pow if possible
+    print(
+        f"Starting CPU stress for ~{duration}s with {num_workers} workers, ~{total_iterations} iterations per worker."
+    )
 
-            # Sine and cosine of sums/differences, square roots, multiplications
-            a = math.sin(a * b + 0.1) * math.cos(
-                b / (a + 0.0001)
-            )  # Added small epsilon to avoid division by zero
-            b = math.tan(a + b) + math.sqrt(
-                abs(a * b) + 1e-6
-            )  # Added epsilon to sqrt input and abs
+    # Start the CPU burner processes
+    start_cpu_burners(num_workers, total_iterations)
 
-            # Removed log/pow for simplicity and error avoidance, replaced with more trig/math
-            # If you want a log-like behavior, you could consider something like:
-            # a = math.log10(abs(a) + 1.0) # log10 of a positive number always > 0
+    # Let the workers run for the specified duration
+    time.sleep(duration)
 
-            if time.time() >= end_time:
-                break
+    # Stop the CPU burner processes
+    stop_cpu_burners()
 
-        if time.time() >= end_time:
-            break
-
-    return f"CPU stress test complete! Burned ~{duration}s of CPU. Total stress cycles: {stress_cycles}."
+    return f"CPU stress test complete! Ran for ~{duration}s. Total stress cycles: {stress_cycles}. Utilized {num_workers} cores."
 
 
 @app.route("/mem-stress")
@@ -103,4 +161,9 @@ def mem_stress():
 
 
 if __name__ == "__main__":
+    # It's good practice to set up the multiprocessing start method, especially on macOS/Windows.
+    # 'fork' is default on Unix and generally faster for this purpose.
+    if os.name == "posix":
+        multiprocessing.set_start_method("fork", force=True)
+
     app.run(host="0.0.0.0", port=5000)
