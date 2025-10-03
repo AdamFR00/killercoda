@@ -33,7 +33,6 @@ def cpu_stress():
         for _ in range(iterations_per_second):
             x = math.sin(x * y) * math.cos(y / x)
             y = math.tan(x + y) + math.sqrt(abs(x * y))
-            z = math.pow(x, y) * math.log(abs(y + 0.0001))
 
             if time.time() >= end_time:
                 break
