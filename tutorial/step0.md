@@ -50,12 +50,10 @@ docker ps
 
 Before we move to setting up monitoring, let's quickly confirm our Flask app is accessible:
 
-- **Check the basic app:**
-  Visit [http://localhost:5000](http://localhost:5000) → You should see:
+- Visit [http://localhost:5000]({{TRAFFIC_HOST1_5000}}) → You should see:
   **“Flask app is running!”**
 
-- **Trigger a CPU stress test:**
-  Visit [http://localhost:5000/cpu-stress](http://localhost:5000/cpu-stress) → This route will intentionally cause a high CPU load within the container for about 5 seconds. This is what we’ll later monitor.
+- Visit [http://localhost:5000/cpu-stress]({{TRAFFIC_HOST1_5000}}) → This route will intentionally cause a high CPU load within the container for about 5 seconds. This is what we’ll later monitor.
 
 ---
 
