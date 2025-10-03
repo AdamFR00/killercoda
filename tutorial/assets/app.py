@@ -84,8 +84,21 @@ def hello():
     <head>
         <title>Flask App</title>
         <style>
-            body {{ font-family: Arial, sans-serif; margin: 40px; }}
-            .container {{ max-width: 600px; }}
+            html, body {{
+                height: 100%;
+                margin: 0;
+            }}
+            body {{
+                font-family: Arial, sans-serif;
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
+                margin: 40px;
+            }}
+            .container {{
+                flex: 1; /* take remaining space, pushes footer down */
+                max-width: 600px;
+            }}
             .refresh-btn {{
                 background-color: #007bff;
                 color: white;
@@ -100,9 +113,19 @@ def hello():
             .link {{ color: #007bff; text-decoration: none; }}
             .link:hover {{ text-decoration: underline; }}
             .footer {{
-                margin-top: 50px;
                 text-align: center;
-                font-size: 24px;
+                font-size: 18px;
+                opacity: 0.5;   /* subtle look */
+                transition: opacity 0.3s, transform 0.2s;
+                padding: 10px 0;
+            }}
+            .footer a {{
+                text-decoration: none;
+                color: inherit;  /* egg inherits emoji color */
+            }}
+            .footer:hover {{
+                opacity: 0.9;     /* becomes more visible on hover */
+                transform: scale(1.2);
             }}
         </style>
     </head>
@@ -111,10 +134,10 @@ def hello():
             <h1>Flask App Status</h1>
             <p>Flask app running in container: <strong>{container_name}</strong>!</p>
             <p>Navigate to <a href="/cpu-stress" class="link">/cpu-stress</a> to generate load.</p>
+        </div>
 
-            <div class="footer">
-                🥚
-            </div>
+        <div class="footer">
+            <a href="/easter-egg">🥚</a>
         </div>
     </body>
     </html>
