@@ -258,13 +258,6 @@ def easter_egg():
     </head>
     <body>
         <h1>🥚 You found the secret Easter Egg!</h1>
-        <pre>
-          ___
-         /   \\
-        |     |
-        |     |
-         \\___/
-        </pre>
         <p>(Shhh... don't tell anyone 👀)</p>
         <button onclick="hatchEgg()">Hatch the Egg!</button>
         <div id="result"></div>
@@ -272,7 +265,7 @@ def easter_egg():
         <script>
             function hatchEgg() {
                 document.getElementById("result").innerHTML =
-                    '<div class="hatched">🐣 The egg hatched! Hello there!</div>';
+                    '<div class="hatched">🐣</div>';
             }
         </script>
     </body>
