@@ -1,26 +1,47 @@
 from flask import Flask
-from multiprocessing import Pool, cpu_count
 import math
 import time
+import os
 
 app = Flask(__name__)
+
+stress_cycles = 0
 
 
 @app.route("/")
 def hello():
-    return "Flask app is running!"
+    container_name = os.getenv("HOSTNAME", "Unknown Container")
+    return f"Flask app running in container: {container_name}! Navigate to /cpu-stress (heavy) or /mem-stress (memory) to generate load."
 
-def work(x):
-    return sum(math.sqrt(i)*i for i in range(1000000))
 
 @app.route("/cpu-stress")
 def cpu_stress():
-    # Burn CPU cycles for ~5 seconds
-    with Pool(cpu_count()) as p: 
-        results = p.map(work, range(cpu_count()))
+    global stress_cycles
+    stress_cycles += 1
 
-    total = sum(results)
-    return f"Result from cpu stress: {total}"
+    start_time = time.time()
+    duration = 20
+    end_time = start_time + duration
+
+    iterations_per_second = 100000
+
+    while time.time() < end_time:
+        x = 1.23456789
+        y = 9.87654321
+
+        for _ in range(iterations_per_second):
+            x = math.sin(x * y) * math.cos(y / x)
+            y = math.tan(x + y) + math.sqrt(abs(x * y))
+            z = math.pow(x, y) * math.log(abs(y + 0.0001))
+
+            if time.time() >= end_time:
+                break
+
+        if time.time() >= end_time:
+            break
+
+    return f"CPU stress test complete! Burned ~{duration}s of CPU. Total stress cycles: {stress_cycles}."
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
