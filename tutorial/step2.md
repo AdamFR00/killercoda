@@ -1,19 +1,64 @@
-# Step 2: Installing Grafana
-In this step, we will install Grafana on within our virtual environment. Grafana is an open-source platform for monitoring and observability that allows you to create, explore, and share dashboards and data visualizations.
+## Step 2: Prometheus
 
-## Installing Grafana
-1. Lets install Grafana via apt install.
+1. Download the latest version of Prometheus from the [Prometheus download page](https://prometheus.io/download/).
     ```
-    sudo apt-get install -y apt-transport-https software-properties-common wget &&
-    sudo mkdir -p /etc/apt/keyrings/ &&
-    wget -q -O - https://apt.grafana.com/gpg.key | gpg --dearmor | sudo tee /etc/apt/keyrings/grafana.gpg > /dev/null &&
-    echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list &&
-    sudo apt-get update && sudo apt-get install -y grafana
+    wget https://github.com/prometheus/prometheus/releases/download/v2.50.1/prometheus-2.50.1.linux-amd64.tar.gz
     ```{{exec}}
 
-2. Lets make sure our Grafana service is running.
+2. Extract the tarball and navigate to the extracted directory. Move to bin directory.
     ```
-    sudo systemctl start grafana-server && sudo systemctl status grafana-server
+    tar -xvf prometheus-2.50.1.linux-amd64.tar.gz && cd prometheus-2.50.1.linux-amd64 && sudo cp prometheus /usr/local/bin
     ```{{exec}}
 
-We should now be able to access Grafana by visiting the following URL in your browser: [http://localhost:3000]({{TRAFFIC_HOST1_3000}}). If you see a page with a login prompt, then Grafana is running correctly.
+3. Lets turn Prometheus into a service (we will do the hard work for you).
+    ```
+    sudo useradd -rs /bin/false prometheus && sudo mkdir /etc/prometheus /var/lib/prometheus && sudo cp prometheus.yml /etc/prometheus/prometheus.yml && sudo cp -r consoles/ console_libraries/ /etc/prometheus/ && sudo chown -R prometheus:prometheus /etc/prometheus /var/lib/prometheus && echo -e "[Unit]\nDescription=Prometheus\nAfter=network.target\n\n[Service]\nUser=prometheus\nGroup=prometheus\nType=simple\nExecStart=/usr/local/bin/prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/var/lib/prometheus --web.console.templates=/etc/prometheus/consoles --web.console.libraries=/etc/prometheus/console_libraries\n\n[Install]\nWantedBy=multi-user.target" | sudo tee /etc/systemd/system/prometheus.service > /dev/null && sudo systemctl daemon-reload && sudo systemctl start prometheus
+    ```{{exec}}
+
+4. Update the Prometheus configuration to scrape metrics from cAdvisor. Your `prometheus.yml` should look like this:
+    ```
+        # my global config
+        global:
+        scrape_interval: 5s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+        evaluation_interval: 5s # Evaluate rules every 15 seconds. The default is every 1 minute.
+        # scrape_timeout is set to the global default (10s).
+
+        # Alertmanager configuration
+        alerting:
+        alertmanagers:
+            - static_configs:
+                - targets:
+                # - alertmanager:9093
+
+        # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+        rule_files:
+        # - "first_rules.yml"
+        # - "second_rules.yml"
+
+        # A scrape configuration containing exactly one endpoint to scrape:
+        scrape_configs:
+        # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+        - job_name: "cAdvisor"
+
+            # metrics_path defaults to '/metrics'
+            # scheme defaults to 'http'.
+
+            static_configs:
+            - targets: ["0.0.0.0:8080"]
+
+    ```
+
+    We will copy this file to the /etc/prometheus directory and restart the prometheus service.
+
+    ```
+    sudo cp /education/prometheus.yml /etc/prometheus/prometheus.yml && sudo systemctl restart prometheus
+    ```{{exec}}
+
+5. Verify Prometheus is running:
+   Visit [http://localhost:9090]({{TRAFFIC_HOST1_9090}}).
+   You should see the Prometheus web interface.
+
+   - Head to **Status → Targets** (`http://localhost:9090/targets`)
+   - Confirm that the **cAdvisor** is listed and **UP**.
+
+---
