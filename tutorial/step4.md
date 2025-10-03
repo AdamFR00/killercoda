@@ -2,7 +2,7 @@
 
 With Prometheus collecting metrics from cAdvisor and Grafana set up to use Prometheus as a data source, we can now create dashboards to visualize our container performance. We'll create a panel to show CPU usage for our `flask-app` container.
 
-## 1. Navigate to Grafana & Sign In
+## Navigate to Grafana & Sign In
 
 1. Open your Grafana UI by clicking on the following link: **[http://localhost:3000]({{TRAFFIC_HOST1_3000}})**.
 
@@ -10,7 +10,7 @@ With Prometheus collecting metrics from cAdvisor and Grafana set up to use Prome
    - **Username:** `admin`
    - **Password:** `admin`
 
-## 2. Create a New Dashboard and Panel
+## Create a New Dashboard and Panel
 
 1. In the top-right corner of the Grafana interface, click the "+" **(Add)** icon.
 
@@ -18,11 +18,11 @@ With Prometheus collecting metrics from cAdvisor and Grafana set up to use Prome
 
 3. In the new, empty dashboard, click on **"Add visualization"**.
 
-## 3. Configure the Prometheus Data Source
+## Configure the Prometheus Data Source
 
-1. You'll be prompted to select a data source. Choose **"Prometheus"**. (It should be the default if you only have this one configured).
+1. You'll be prompted to select a data source. Choose **"Prometheus"**. (It should be the default, as you only have this one configured).
 
-## 4. Set Up the CPU Usage Panel
+## Set Up the CPU Usage Panel
 
 1. **(Optional)** On the right-hand side, under **"Panel options"**, set the title to `CPU Usage`.
 
@@ -30,19 +30,21 @@ With Prometheus collecting metrics from cAdvisor and Grafana set up to use Prome
 
 3. Paste the following PromQL query into the query input field:
 
-```bash
-rate(container_cpu_usage_seconds_total{image="flask-app"}[1m])
-```
+    ```bash
+    rate(container_cpu_usage_seconds_total{image="flask-app"}[1m])
+    ```
 
-**What this query does:**
+    **What this query does:**
 
-- `container_cpu_usage_seconds_total`: This metric (collected by **cAdvisor**) tracks the total CPU time in seconds that your container has consumed since it started.
+    - `container_cpu_usage_seconds_total`: This metric (collected by **cAdvisor**) tracks the total CPU time in seconds that your container has consumed since it started.
 
-- `{image="flask-app"}`: This is a label selector. It filters the metrics to only include those associated with the `flask-app`.
+    - `{image="flask-app"}`: This is a label selector. It filters the metrics to only include those associated with the `flask-app`.
 
-- `[1m]`: This is a range vector selector, specifying that we want to look at data over the last 1 minute.
+    - `[1m]`: This is a range vector selector, specifying that we want to look at data over the last 1 minute.
 
-- `rate(... )`: This function calculates the per-second average rate of increase of the counter over the specified time window (`1m`). This effectively shows you the __current CPU utilization rate__ in seconds per second.
+    - `rate(... )`: This function calculates the per-second average rate of increase of the counter over the specified time window (`1m`). This effectively shows you the __current CPU utilization rate__ in seconds per second.
+
+    ![Query](./assets/img/query.png)
 
 4. Press **"Run queries"** (or the play button). You should now see data appearing in the panel above.
 
