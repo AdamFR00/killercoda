@@ -97,7 +97,7 @@ Now that we have metrics available from cAdvisor, we need a way to scrape and st
    You should see the Prometheus web interface.
 
    - Head to **Status → Targets** (`http://localhost:9090/targets`)
-   - Confirm that the **cadvisor target** is listed and **UP**.
+   - Confirm that the **cAdvisor** is listed and **UP**.
 
 ---
 
