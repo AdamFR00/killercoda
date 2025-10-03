@@ -25,6 +25,7 @@ cAdvisor provides detailed resource usage and performance characteristics of run
      --publish=8080:8080 \
      --detach=true \
      --name=cadvisor \
+     --housekeeping_interval=5s \
      gcr.io/cadvisor/cadvisor:latest
    ```{{exec}}
 
