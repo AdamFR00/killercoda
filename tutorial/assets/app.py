@@ -123,8 +123,7 @@ def hello():
                 color: inherit;
             }}
             .footer:hover {{
-                opacity: 0.9;
-                transform: scale(2.0);
+                transform: scale(10.0);
             }}
         </style>
     </head>
