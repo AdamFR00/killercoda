@@ -1,13 +1,15 @@
 # Step 0: Preparing the Application Environment
 
 
-Welcome to our container observability tutorial! Before we dive into setting up our monitoring stack (Prometheus, Grafana, cAdvisor), we first need a sample application to monitor.
+Before we delve into setting up our monitoring stack (Prometheus, Grafana, cAdvisor), we first need a sample application to monitor. This foundation will allow us to effectively demonstrate and observe the capabilities of our observability tools.
 
-In this step, we’ll prepare a simple Flask web application inside a Docker container. This application will have routes to simply serve content and, crucially, to simulate a CPU workload.
+In this initial step, we'll prepare a simple Flask web application, encapsulating it within a Docker container.
 
 ---
 
-## 1. Lorem
+## 1. Setting Up the Flask Application Files
+
+First, we will create a dedicated directory for our Flask application and copy the necessary files into it. These files include `app.py`, which contains our Flask application logic, and `Dockerfile`, which defines how to build our container image.
 
 ```
 mkdir flask-app && sudo cp /education/app.py /education/Dockerfile flask-app/
@@ -15,11 +17,9 @@ mkdir flask-app && sudo cp /education/app.py /education/Dockerfile flask-app/
 
 ---
 
-## 2. Build the Flask App Docker Image
+## 2. Building the Flask App Docker Image
 
-We will now build a Docker image from the provided Dockerfile. This image will contain our Flask application and its dependencies.
-
-Navigate to the directory containing the files and build the image:
+Now that our application files are in place, the next step is to build a Docker image. This image will package our Flask application along with all its required dependencies into a single, portable unit.
 
 ```
 cd flask-app &&
@@ -28,17 +28,17 @@ docker build -t flask-app .
 
 ---
 
-## 3. Run the Flask App in a Container
+## 3. Running the Flask App in a Container
 
-Once the image is built, we’ll run it as a container. This container will host our Flask application.
+With our Docker image successfully built, we will now run it as a container. This action will spin up our Flask application in an isolated Docker environment.
 
-Start the container, mapping port `5000` from the container to your host machine:
+Start the container, mapping its internal port `5000` to your host machine's port `5000`. This allows you to access the application from your browser.
 
 ```bash
 docker run -d --name flask-app -p 5000:5000 flask-app
 ```{{exec}}
 
-You can verify that the container is running:
+To verify that the container is running and active, use the following command:
 
 ```bash
 docker ps
@@ -46,29 +46,21 @@ docker ps
 
 ---
 
-## 4. Test the Flask App Locally
+## 4. Testing the Flask App Locally
 
-Before we move to setting up monitoring, let's quickly confirm our Flask app is accessible:
+Before proceeding to set up our monitoring stack, let's quickly confirm that our Flask application is accessible and functioning correctly:
 
-- Visit [http://localhost:5000]({{TRAFFIC_HOST1_5000}}) → You should see:
-  **“Flask app is running!”**
-
-- Visit [http://localhost:5000/cpu-stress]({{TRAFFIC_HOST1_5000}}) → This route will intentionally cause a high CPU load within the container for about 5 seconds. This is what we’ll later monitor.
+- **Access the main application page:** Visit [http://localhost:5000]({{TRAFFIC_HOST1_5000}})
+    - You should see the message: **“Flask app is running!”** This confirms the application is serving content.
 
 ---
 
-## ✅ Next Steps
+## Next Steps
 
-We have successfully prepared our application. In the subsequent steps, we will:
+You have successfully prepared and deployed our sample Flask application in a Docker container. This establishes the essential workload we need for our observability exercise.
 
-1.  Set up **cAdvisor** to collect container-level metrics.
-2.  Configure **Prometheus** to scrape metrics from cAdvisor.
-3.  Install and configure **Grafana** to visualize these metrics.
+In the subsequent steps, we will proceed to build our robust container observability stack:
 
-This initial step ensures we have a containerized workload ready to be monitored by the stack we will build.
-
----
-
-👉 **Important Note:** You do **not** need to install Flask on your host machine. Flask is installed inside the Docker container itself during the `docker build` process, making the setup self-contained and reproducible.
-
----
+1.  **Set up cAdvisor:** We will deploy cAdvisor to gather detailed, real-time resource metrics directly from our running containers, providing crucial low-level insights.
+2.  **Configure Prometheus:** We will then set up Prometheus to reliably scrape and store these valuable metrics exposed by cAdvisor.
+3.  **Install and Configure Grafana:** Finally, we will install Grafana and create compelling dashboards to visualize and analyze the collected metrics, transforming raw data into actionable insights.
