@@ -1,7 +1,7 @@
 <div>
-    <img src="./assets/grafana.png" height="80px"/>
-    <img src="./assets/cadvisor.png" height="80px" />
-    <img src="./assets/prometheus.png" height="80px" />
+    <img src="./assets/img/grafana.png" height="80px"/>
+    <img src="./assets/img/cadvisor.png" height="80px" />
+    <img src="./assets/img/prometheus.png" height="80px" />
 </div>
 
 # Observability for Containerized Apps with cAdvisor, Prometheus & Grafana
