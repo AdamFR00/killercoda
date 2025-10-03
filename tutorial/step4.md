@@ -12,7 +12,7 @@ Grafana uses configuration files to automatically set up data sources, dashboard
 
 - `access`: How Grafana should access the data source. `proxy` means Grafana acts as a proxy, making requests on behalf of the user to the data source's URL.
 
-- `url`: The network address of the data source. In our case, it's [http://localhost:9090]({{TRAFFIC_HOST1_9090}}), where Prometheus is running.
+- `url`: The network address of the data source. In our case, it's **[http://localhost:9090]({{TRAFFIC_HOST1_9090}})**, where Prometheus is running.
 
 - `isDefault`: If set to `true`, this data source will be automatically selected when you create a new dashboard panel.
 
