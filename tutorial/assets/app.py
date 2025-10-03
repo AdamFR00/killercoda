@@ -249,7 +249,7 @@ def easter_egg():
             }
             .hatched {
                 color: green;
-                font-size: 24px;
+                font-size: 102px;
                 margin-top: 20px;
                 font-weight: bold;
             }
