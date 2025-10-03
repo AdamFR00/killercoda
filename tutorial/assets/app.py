@@ -78,7 +78,40 @@ def stop_cpu_burners():
 @app.route("/")
 def hello():
     container_name = os.getenv("HOSTNAME", "Unknown Container")
-    return f"Flask app running in container: {container_name}! Navigate to /cpu-stress to generate load."
+    html = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Flask App</title>
+        <style>
+            body {{ font-family: Arial, sans-serif; margin: 40px; }}
+            .container {{ max-width: 600px; }}
+            .refresh-btn {{
+                background-color: #007bff;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+                margin: 10px 0;
+            }}
+            .refresh-btn:hover {{ background-color: #0056b3; }}
+            .link {{ color: #007bff; text-decoration: none; }}
+            .link:hover {{ text-decoration: underline; }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Flask App Status</h1>
+            <p>Flask app running in container: <strong>{container_name}</strong>!</p>
+            <p>Navigate to <a href="/cpu-stress" class="link">/cpu-stress</a> to generate load.</p>
+            <button class="refresh-btn" onclick="window.location.reload()">Refresh Page</button>
+        </div>
+    </body>
+    </html>
+    """
+    return html
 
 
 @app.route("/cpu-stress")
@@ -113,56 +146,46 @@ def cpu_stress():
     # Stop the CPU burner processes
     stop_cpu_burners()
 
-    return f"CPU stress test complete! Ran for ~{duration}s. Total stress cycles: {stress_cycles}. Utilized {num_workers} cores."
-
-
-@app.route("/mem-stress")
-def mem_stress():
-    global stress_cycles  # Reuse cycle counter or create a new one if you prefer
-    stress_cycles += 1
-
-    start_time = time.time()
-    duration = 25  # seconds
-    end_time = start_time + duration
-
-    # Allocate memory in chunks
-    chunk_size_mb = 50  # Allocate 50MB per chunk
-    num_chunks_to_allocate = 20  # Try to allocate ~1GB total
-
-    try:
-        for i in range(num_chunks_to_allocate):
-            if time.time() >= end_time:
-                break
-
-            # Allocate a chunk of memory. Fill it with some data to ensure it's used.
-            # This consumes significant RAM.
-            new_chunk = [0.0] * (
-                chunk_size_mb * 1024 * 1024 // 8
-            )  # Approx bytes for float64
-            for j in range(len(new_chunk)):
-                new_chunk[j] = math.sin(j * i) * math.cos(i / (j + 1e-6))
-
-            memory_chunks.append(new_chunk)
-
-            # Small delay to not completely freeze the web server,
-            # but still consume memory rapidly.
-            time.sleep(0.5)
-
-        return f"Memory stress test complete! Allocated ~{len(memory_chunks) * chunk_size_mb}MB of memory. Total stress cycles: {stress_cycles}."
-
-    except MemoryError:
-        return "Memory stress test failed: Ran out of memory!", 500
-    finally:
-        # Clean up some memory if the process is ending, but keep most of it
-        # to observe the high usage. For a true test, you might want to leave
-        # it allocated until the container is stopped/restarted.
-        # In a real scenario, you'd have to consider how to stop this gracefully.
-        pass
-
+    html = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>CPU Stress Test</title>
+        <style>
+            body {{ font-family: Arial, sans-serif; margin: 40px; }}
+            .container {{ max-width: 600px; }}
+            .refresh-btn {{
+                background-color: #007bff;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+                margin: 10px 0;
+            }}
+            .refresh-btn:hover {{ background-color: #0056b3; }}
+            .link {{ color: #007bff; text-decoration: none; }}
+            .link:hover {{ text-decoration: underline; }}
+            .success {{ color: #28a745; font-weight: bold; }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>CPU Stress Test Complete!</h1>
+            <p class="success">CPU stress test complete! Ran for ~{duration}s.</p>
+            <p><strong>Total stress cycles:</strong> {stress_cycles}</p>
+            <p><strong>Cores utilized:</strong> {num_workers}</p>
+            <button class="refresh-btn" onclick="window.location.reload()">Refresh Page</button>
+            <br>
+            <a href="/" class="link">← Back to Home</a>
+        </div>
+    </body>
+    </html>
+    """
+    return html
 
 if __name__ == "__main__":
-    # It's good practice to set up the multiprocessing start method, especially on macOS/Windows.
-    # 'fork' is default on Unix and generally faster for this purpose.
     if os.name == "posix":
         multiprocessing.set_start_method("fork", force=True)
 
