@@ -38,7 +38,7 @@ With Prometheus collecting metrics from cAdvisor and Grafana set up to use Prome
 
     - `container_cpu_usage_seconds_total`: This metric (collected by **cAdvisor**) tracks the total CPU time in seconds that your container has consumed since it started.
 
-    - `{image="flask-app"}`: This is a label selector. It filters the metrics to only include those associated with the `flask-app`.
+    - `{image="flask-app"}`: This is a label selector. It filters the metrics to only include those associated with the Flask app.
 
     - `[1m]`: This is a range vector selector, specifying that we want to look at data over the last 1 minute.
 
