@@ -22,7 +22,8 @@ In this step, we will install Grafana on within our virtual environment. Grafana
 
 2. Let's make sure our Grafana service is running.
     ```
-    sudo systemctl start grafana-server && sudo systemctl status grafana-server
+    sudo systemctl start grafana-server &&
+    sudo systemctl status grafana-server
     ```{{exec}}
 
 We should now be able to access Grafana by visiting the following URL in your browser: **[http://localhost:3000]({{TRAFFIC_HOST1_3000}})**. If you see a page with a login prompt, then Grafana is running correctly.
