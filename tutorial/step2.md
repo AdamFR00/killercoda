@@ -1,6 +1,6 @@
 ## Step 2: Prometheus
 
-1. Download the latest version of Prometheus from the [Prometheus download page](https://prometheus.io/download/).
+1. Download the latest version of Prometheus from the [Prometheus download page](https://prometheus.io/download/) using wget.
     ```
     wget https://github.com/prometheus/prometheus/releases/download/v2.50.1/prometheus-2.50.1.linux-amd64.tar.gz
     ```{{exec}}
@@ -12,10 +12,55 @@
 
 3. Lets turn Prometheus into a service (we will do the hard work for you).
     ```
-    sudo useradd -rs /bin/false prometheus && sudo mkdir /etc/prometheus /var/lib/prometheus && sudo cp prometheus.yml /etc/prometheus/prometheus.yml && sudo cp -r consoles/ console_libraries/ /etc/prometheus/ && sudo chown -R prometheus:prometheus /etc/prometheus /var/lib/prometheus && echo -e "[Unit]\nDescription=Prometheus\nAfter=network.target\n\n[Service]\nUser=prometheus\nGroup=prometheus\nType=simple\nExecStart=/usr/local/bin/prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/var/lib/prometheus --web.console.templates=/etc/prometheus/consoles --web.console.libraries=/etc/prometheus/console_libraries\n\n[Install]\nWantedBy=multi-user.target" | sudo tee /etc/systemd/system/prometheus.service > /dev/null && sudo systemctl daemon-reload && sudo systemctl start prometheus
+    sudo useradd -rs /bin/false prometheus && sudo mkdir /etc/prometheus /var/lib/prometheus && sudo cp /education/prometheus.yml /etc/prometheus/prometheus.yml && sudo cp -r consoles/ console_libraries/ /etc/prometheus/ && sudo chown -R prometheus:prometheus /etc/prometheus /var/lib/prometheus && echo -e "[Unit]\nDescription=Prometheus\nAfter=network.target\n\n[Service]\nUser=prometheus\nGroup=prometheus\nType=simple\nExecStart=/usr/local/bin/prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/var/lib/prometheus --web.console.templates=/etc/prometheus/consoles --web.console.libraries=/etc/prometheus/console_libraries\n\n[Install]\nWantedBy=multi-user.target" | sudo tee /etc/systemd/system/prometheus.service > /dev/null && sudo systemctl daemon-reload && sudo systemctl start prometheus
     ```{{exec}}
 
-4. Update the Prometheus configuration to scrape metrics from cAdvisor. Your `prometheus.yml` should look like this:
+Let's break it down:
+```bash
+    sudo useradd -rs /bin/false prometheus
+```
+Adds a system account for prometheus shown by -r. Usally, a user is given a login shell such as /bin/bash or /bin/sh. But as this is only an account for prometheus we disable the login option by adding a shell that immediatly exits -s /bin/false.
+```bash
+    sudo mkdir /etc/prometheus /var/lib/prometheus && sudo cp prometheus.yml /etc/prometheus/prometheus.yml
+```
+Creates necessary prometheus directories
+```bash
+sudo cp /education/prometheus.yml /etc/prometheus/prometheus.yml
+sudo cp -r consoles/ console_libraries/ /etc/prometheus/
+``` 
+Copy our config file `/education/prometheus.yml` into our directory and copy the html console templates into our directory. 
+```bash
+sudo chown -R prometheus:prometheus /etc/prometheus /var/lib/prometheus 
+```
+Makes the user prometheus the owner of the directories.
+```bash
+echo -e "[Unit]
+Description=Prometheus
+After=network.target
+
+[Service]
+User=prometheus
+Group=prometheus
+Type=simple
+ExecStart=/usr/local/bin/prometheus \
+  --config.file=/etc/prometheus/prometheus.yml \
+  --storage.tsdb.path=/var/lib/prometheus \
+  --web.console.templates=/etc/prometheus/consoles \
+  --web.console.libraries=/etc/prometheus/console_libraries
+
+[Install]
+WantedBy=multi-user.target" \
+| sudo tee /etc/systemd/system/prometheus.service > /dev/null
+```
+Here we create the /etc/systemd/system/prometheus.service. 
+[Unit] - creates the metadata for the service. 
+[Service] - defines how the prometheus should run. 
+[Install] - Makes prometheus start on boot. 
+```bash
+    sudo systemctl daemon-reload && sudo systemctl start prometheus
+```
+Then we reload the systemd configuration files and start the prometheus service.  
+4. Your `/etc/prometheus/prometheus.yml` should look like this:
     ```
         # my global config
         global:
@@ -47,13 +92,6 @@
             - targets: ["0.0.0.0:8080"]
 
     ```
-
-    We will copy this file to the /etc/prometheus directory and restart the prometheus service.
-
-    ```
-    sudo cp /education/prometheus.yml /etc/prometheus/prometheus.yml && sudo systemctl restart prometheus
-    ```{{exec}}
-
 5. Verify Prometheus is running:
    Visit [http://localhost:9090]({{TRAFFIC_HOST1_9090}}).
    You should see the Prometheus web interface.
