@@ -53,7 +53,46 @@ Now that we have metrics available from cAdvisor, we need a way to scrape and st
     sudo useradd -rs /bin/false prometheus && sudo mkdir /etc/prometheus /var/lib/prometheus && sudo cp prometheus.yml /etc/prometheus/prometheus.yml && sudo cp -r consoles/ console_libraries/ /etc/prometheus/ && sudo chown -R prometheus:prometheus /etc/prometheus /var/lib/prometheus && echo -e "[Unit]\nDescription=Prometheus\nAfter=network.target\n\n[Service]\nUser=prometheus\nGroup=prometheus\nType=simple\nExecStart=/usr/local/bin/prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/var/lib/prometheus --web.console.templates=/etc/prometheus/consoles --web.console.libraries=/etc/prometheus/console_libraries\n\n[Install]\nWantedBy=multi-user.target" | sudo tee /etc/systemd/system/prometheus.service > /dev/null && sudo systemctl daemon-reload && sudo systemctl start prometheus
     ```{{exec}}
 
-6. Verify Prometheus is running:
+4. Update the Prometheus configuration to scrape metrics from cAdvisor. Your `prometheus.yml` should look like this:
+    ```
+        # my global config
+        global:
+        scrape_interval: 5s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+        evaluation_interval: 5s # Evaluate rules every 15 seconds. The default is every 1 minute.
+        # scrape_timeout is set to the global default (10s).
+
+        # Alertmanager configuration
+        alerting:
+        alertmanagers:
+            - static_configs:
+                - targets:
+                # - alertmanager:9093
+
+        # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+        rule_files:
+        # - "first_rules.yml"
+        # - "second_rules.yml"
+
+        # A scrape configuration containing exactly one endpoint to scrape:
+        scrape_configs:
+        # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+        - job_name: "cAdvisor"
+
+            # metrics_path defaults to '/metrics'
+            # scheme defaults to 'http'.
+
+            static_configs:
+            - targets: ["0.0.0.0:8080"]
+
+    ```
+
+    We will copy this file to the /etc/prometheus directory and restart the prometheus service.
+
+    ```
+    sudo cp /education/prometheus.yml /etc/prometheus/prometheus.yml && sudo systemctl restart prometheus
+    ```{{exec}}
+
+5. Verify Prometheus is running:
    Visit [http://localhost:9090]({{TRAFFIC_HOST1_9090}}).
    You should see the Prometheus web interface.
 
