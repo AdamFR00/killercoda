@@ -1,0 +1,20 @@
+{
+    "title": "Observability for Containerized Apps with cAdvisor, Prometheus & Grafana",
+    "description": "Learn how to set up and configure cAdvisor, Prometheus, and Grafana to monitor and visualize containerized applications.",
+    "details": {
+        "intro": {
+            "text": "intro.md"
+        },
+        "steps": [
+            {
+                "text": "step1.md"
+            }
+        ],
+        "finish": {
+            "text": "finished.md"
+        }
+    },
+    "backend": {
+        "imageid": "ubuntu"
+    }
+}
