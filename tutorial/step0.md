@@ -12,7 +12,8 @@ In this initial step, we'll prepare a simple Flask web application, encapsulatin
 First, we will create a dedicated directory for our Flask application and copy the necessary files into it. These files include `app.py`, which contains our Flask application logic, and `Dockerfile`, which defines how to build our container image.
 
 ```
-mkdir flask-app && sudo cp /education/app.py /education/Dockerfile flask-app/
+mkdir flask-app &&
+sudo cp /education/app.py /education/Dockerfile flask-app/
 ```{{exec}}
 
 ---
