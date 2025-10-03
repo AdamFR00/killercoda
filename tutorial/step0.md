@@ -8,5 +8,5 @@ In this step, we’ll prepare a simple Flask web application inside a Docker con
 ## Lorem
 
 ```
-sudo cp -r /education/flask flask-app
+sudo cp /education/app.py /education/Dockerfile flask-app/
 ```{{exec}}
