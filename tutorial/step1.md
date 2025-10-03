@@ -38,69 +38,20 @@ cAdvisor provides detailed resource usage and performance characteristics of run
 
 Now that we have metrics available from cAdvisor, we need a way to scrape and store them. This is where **Prometheus** comes in.
 
-1. Download and extract Prometheus:
+1. Download the latest version of Prometheus from the [Prometheus download page](https://prometheus.io/download/).
+    ```
+    wget https://github.com/prometheus/prometheus/releases/download/v2.50.1/prometheus-2.50.1.linux-amd64.tar.gz
+    ```{{exec}}
 
-   ```bash
-   wget https://github.com/prometheus/prometheus/releases/download/v2.50.1/prometheus-2.50.1.linux-amd64.tar.gz
-   tar -xvf prometheus-2.50.1.linux-amd64.tar.gz
-   cd prometheus-2.50.1.linux-amd64
-   sudo cp prometheus /usr/local/bin
-   cd ..
-   ```{{exec}}
+2. Extract the tarball and navigate to the extracted directory. Move to bin directory.
+    ```
+    tar -xvf prometheus-2.50.1.linux-amd64.tar.gz && cd prometheus-2.50.1.linux-amd64 && sudo cp prometheus /usr/local/bin
+    ```{{exec}}
 
-2. Create a Prometheus user and necessary directories:
-
-   ```bash
-   sudo useradd -rs /bin/false prometheus
-   sudo mkdir /etc/prometheus /var/lib/prometheus
-   sudo cp -r prometheus-2.50.1.linux-amd64/consoles /etc/prometheus/
-   sudo cp -r prometheus-2.50.1.linux-amd64/console_libraries /etc/prometheus/
-   sudo chown -R prometheus:prometheus /etc/prometheus /var/lib/prometheus
-   ```{{exec}}
-
-3. Create the Prometheus configuration file:
-
-   ```bash
-   cat <<EOF | sudo tee /etc/prometheus/prometheus.yml
-   global:
-     scrape_interval: 5s
-     evaluation_interval: 5s
-
-   scrape_configs:
-     - job_name: "cadvisor"
-       static_configs:
-         - targets: ["0.0.0.0:8080"]
-   EOF
-   ```{{exec}}
-
-4. Create the Prometheus systemd service:
-
-   ```bash
-   echo -e "[Unit]
-   Description=Prometheus
-   After=network.target
-
-   [Service]
-   User=prometheus
-   Group=prometheus
-   Type=simple
-   ExecStart=/usr/local/bin/prometheus \\
-     --config.file=/etc/prometheus/prometheus.yml \\
-     --storage.tsdb.path=/var/lib/prometheus \\
-     --web.console.templates=/etc/prometheus/consoles \\
-     --web.console.libraries=/etc/prometheus/console_libraries
-
-   [Install]
-   WantedBy=multi-user.target" | sudo tee /etc/systemd/system/prometheus.service
-   ```{{exec}}
-
-5. Enable and start Prometheus:
-
-   ```bash
-   sudo systemctl daemon-reload
-   sudo systemctl enable prometheus
-   sudo systemctl start prometheus
-   ```{{exec}}
+3. Lets turn Prometheus into a service (we will do the hard work for you).
+    ```
+    sudo useradd -rs /bin/false prometheus && sudo mkdir /etc/prometheus /var/lib/prometheus && sudo cp prometheus.yml /etc/prometheus/prometheus.yml && sudo cp -r consoles/ console_libraries/ /etc/prometheus/ && sudo chown -R prometheus:prometheus /etc/prometheus /var/lib/prometheus && echo -e "[Unit]\nDescription=Prometheus\nAfter=network.target\n\n[Service]\nUser=prometheus\nGroup=prometheus\nType=simple\nExecStart=/usr/local/bin/prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/var/lib/prometheus --web.console.templates=/etc/prometheus/consoles --web.console.libraries=/etc/prometheus/console_libraries\n\n[Install]\nWantedBy=multi-user.target" | sudo tee /etc/systemd/system/prometheus.service > /dev/null && sudo systemctl daemon-reload && sudo systemctl start prometheus
+    ```{{exec}}
 
 6. Verify Prometheus is running:
    Visit [http://localhost:9090]({{TRAFFIC_HOST1_9090}}).
