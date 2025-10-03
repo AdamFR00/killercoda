@@ -99,6 +99,11 @@ def hello():
             .refresh-btn:hover {{ background-color: #0056b3; }}
             .link {{ color: #007bff; text-decoration: none; }}
             .link:hover {{ text-decoration: underline; }}
+            .footer {{
+                margin-top: 50px;
+                text-align: center;
+                font-size: 24px;
+            }}
         </style>
     </head>
     <body>
@@ -106,6 +111,10 @@ def hello():
             <h1>Flask App Status</h1>
             <p>Flask app running in container: <strong>{container_name}</strong>!</p>
             <p>Navigate to <a href="/cpu-stress" class="link">/cpu-stress</a> to generate load.</p>
+
+            <div class="footer">
+                🥚
+            </div>
         </div>
     </body>
     </html>
