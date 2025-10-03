@@ -4,11 +4,11 @@
     <img src="./assets/img/prometheus.png" height="80px" />
 </div>
 
-# Observability for Containerized Apps with cAdvisor, Prometheus & Grafana
+## Observability for Containerized Apps with cAdvisor, Prometheus & Grafana
 
 In this course, you will learn the fundamentals of cAdvisor, Prometheus and Grafana.
 
-## Intended Learning Outcomes (ILOs)
+### Intended Learning Outcomes (ILOs)
 
 By the end of this tutorial, you will be able to:
 
@@ -20,9 +20,9 @@ By the end of this tutorial, you will be able to:
 
 - **Create and customize** Grafana dashboards to visualize these collected metrics effectively.
 
-## Motivation: Why Container Observability Matters for DevOps
+### Motivation: Why Container Observability Matters for DevOps
 
-In modern software development, applications are often deployed in containers, providing consistency and scalability. However, managing and troubleshooting these dynamic environments requires deep visibility into what's happening inside each container. Without effective observability, you're left guessing when performance issues arise. 
+In modern software development, applications are often deployed in containers, providing consistency and scalability. However, managing and troubleshooting these dynamic environments requires deep visibility into what's happening inside each container. Without effective observability, you're left guessing when performance issues arise.
 
 This tutorial provides a practical solution by combining three essential open-source tools:
 
@@ -32,7 +32,7 @@ This tutorial provides a practical solution by combining three essential open-so
 
 - **Grafana:** A platform for creating interactive and insightful dashboards, transforming raw metrics into more understandable visualizations.
 
-## Executable Tutorial Overview
+### Executable Tutorial Overview
 
 This hands-on tutorial is structured to guide you step-by-step through setting up and utilizing an observability stack:
 
