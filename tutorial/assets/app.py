@@ -84,8 +84,21 @@ def hello():
     <head>
         <title>Flask App</title>
         <style>
-            body {{ font-family: Arial, sans-serif; margin: 40px; }}
-            .container {{ max-width: 600px; }}
+            html, body {{
+                height: 100%;
+                margin: 0;
+            }}
+            body {{
+                font-family: Arial, sans-serif;
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
+                margin: 40px;
+            }}
+            .container {{
+                max-height: 90vh;
+                max-width: 600px;
+            }}
             .refresh-btn {{
                 background-color: #007bff;
                 color: white;
@@ -99,6 +112,20 @@ def hello():
             .refresh-btn:hover {{ background-color: #0056b3; }}
             .link {{ color: #007bff; text-decoration: none; }}
             .link:hover {{ text-decoration: underline; }}
+            .footer {{
+                text-align: center;
+                font-size: 18px;
+                transition: opacity 0.3s, transform 0.2s;
+                padding: 10px 0;
+            }}
+            .footer a {{
+                text-decoration: none;
+                color: inherit;
+            }}
+            .footer:hover {{
+                opacity: 0.9;
+                transform: scale(2.0);
+            }}
         </style>
     </head>
     <body>
@@ -106,6 +133,10 @@ def hello():
             <h1>Flask App Status</h1>
             <p>Flask app running in container: <strong>{container_name}</strong>!</p>
             <p>Navigate to <a href="/cpu-stress" class="link">/cpu-stress</a> to generate load.</p>
+        </div>
+
+        <div class="footer">
+            <a href="/easter-egg">🥚</a>
         </div>
     </body>
     </html>
@@ -180,6 +211,75 @@ def cpu_stress():
     </html>
     """
     return html
+
+
+@app.route("/easter-egg")
+def easter_egg():
+    html = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>🥚 Easter Egg</title>
+        <style>
+            body {
+                font-family: "Comic Sans MS", cursive, sans-serif;
+                background-color: #fff8dc;
+                text-align: center;
+                margin-top: 50px;
+            }
+            pre {
+                font-size: 14px;
+                color: #8b4513;
+                font-weight: bold;
+                line-height: 1.2em;
+            }
+            button {
+                background-color: #ff69b4;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                margin-top: 20px;
+                border-radius: 10px;
+                font-size: 16px;
+                cursor: pointer;
+                transition: transform 0.2s;
+            }
+            button:hover {
+                transform: scale(1.1);
+                background-color: #ff1493;
+            }
+            .hatched {
+                color: green;
+                font-size: 24px;
+                margin-top: 20px;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>🥚 You found the secret Easter Egg!</h1>
+        <pre>
+          ___
+         /   \\
+        |     |
+        |     |
+         \\___/
+        </pre>
+        <p>(Shhh... don't tell anyone 👀)</p>
+        <button onclick="hatchEgg()">Hatch the Egg!</button>
+        <div id="result"></div>
+
+        <script>
+            function hatchEgg() {
+                document.getElementById("result").innerHTML =
+                    '<div class="hatched">🐣 The egg hatched! Hello there!</div>';
+            }
+        </script>
+    </body>
+    </html>
+    """
+    return html
+
 
 if __name__ == "__main__":
     if os.name == "posix":

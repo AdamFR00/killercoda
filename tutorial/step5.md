@@ -1,8 +1,8 @@
-# Step 5: Visualizing Container Metrics with Grafana
+## Step 5: Visualizing Container Metrics with Grafana
 
 With Prometheus collecting metrics from cAdvisor and Grafana set up to use Prometheus as a data source, we can now create dashboards to visualize our container performance. We'll create a panel to show CPU usage for our `flask-app` container.
 
-## Navigate to Grafana & Sign In
+### Navigate to Grafana & Sign In
 
 1. Open your Grafana UI by clicking on the following link: **[http://localhost:3000]({{TRAFFIC_HOST1_3000}})**.
 
@@ -10,7 +10,7 @@ With Prometheus collecting metrics from cAdvisor and Grafana set up to use Prome
    - **Username:** `admin`
    - **Password:** `admin`
 
-## Create a New Dashboard and Panel
+### Create a New Dashboard and Panel
 
 1. In the top-right corner of the Grafana interface, click the "+" **(Add)** icon.
 
@@ -18,11 +18,11 @@ With Prometheus collecting metrics from cAdvisor and Grafana set up to use Prome
 
 3. In the new, empty dashboard, click on **"Add visualization"**.
 
-## Configure the Prometheus Data Source
+### Configure the Prometheus Data Source
 
 1. You'll be prompted to select a data source. Choose **"Prometheus"**. (It should be the default, as you only have this one configured).
 
-## Set Up the CPU Usage Panel
+### Set Up the CPU Usage Panel
 
 1. **(Optional)** On the right-hand side, under **"Panel options"**, set the title to `CPU Usage`.
 
