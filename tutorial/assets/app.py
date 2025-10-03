@@ -96,7 +96,7 @@ def hello():
                 margin: 40px;
             }}
             .container {{
-                flex: 1; /* take remaining space, pushes footer down */
+                max-height: 90vh;
                 max-width: 600px;
             }}
             .refresh-btn {{
@@ -115,17 +115,16 @@ def hello():
             .footer {{
                 text-align: center;
                 font-size: 18px;
-                opacity: 0.5;   /* subtle look */
                 transition: opacity 0.3s, transform 0.2s;
                 padding: 10px 0;
             }}
             .footer a {{
                 text-decoration: none;
-                color: inherit;  /* egg inherits emoji color */
+                color: inherit;
             }}
             .footer:hover {{
-                opacity: 0.9;     /* becomes more visible on hover */
-                transform: scale(1.2);
+                opacity: 0.9;
+                transform: scale(2.0);
             }}
         </style>
     </head>
