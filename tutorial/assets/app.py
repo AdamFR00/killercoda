@@ -106,7 +106,6 @@ def hello():
             <h1>Flask App Status</h1>
             <p>Flask app running in container: <strong>{container_name}</strong>!</p>
             <p>Navigate to <a href="/cpu-stress" class="link">/cpu-stress</a> to generate load.</p>
-            <button class="refresh-btn" onclick="window.location.reload()">Refresh Page</button>
         </div>
     </body>
     </html>
@@ -172,13 +171,10 @@ def cpu_stress():
     </head>
     <body>
         <div class="container">
-            <h1>CPU Stress Test Complete!</h1>
+            <h1>Flask App Status: CPU Stress</h1>
             <p class="success">CPU stress test complete! Ran for ~{duration}s.</p>
             <p><strong>Total stress cycles:</strong> {stress_cycles}</p>
-            <p><strong>Cores utilized:</strong> {num_workers}</p>
             <button class="refresh-btn" onclick="window.location.reload()">Refresh Page</button>
-            <br>
-            <a href="/" class="link">← Back to Home</a>
         </div>
     </body>
     </html>
