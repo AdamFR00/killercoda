@@ -1,5 +1,5 @@
 <div>
-    <img src="./assets/img/grafana.png" height="80px"/>
+    <img src="./assets/img/grafana.webp" height="80px"/>
     <img src="./assets/img/cadvisor.png" height="80px" />
     <img src="./assets/img/prometheus.png" height="80px" />
 </div>
