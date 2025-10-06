@@ -32,7 +32,7 @@
       "text": "finished.md"
     },
     "assets": {
-      "host01": [{ "file": "*", "target": "/education" }]
+      "host01": [{ "file": "*", "target": "/assets" }]
     }
   },
   "backend": {

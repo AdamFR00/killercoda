@@ -9,11 +9,11 @@ First, we'll prepare a simple Flask web application, encapsulating it within a D
 
 ### Setting Up the Flask Application Files
 
-Create a dedicated directory for our Flask application and copy the necessary files into it. These files include `app.py`, which contains our Flask application logic, and `Dockerfile`, which defines how to build the container image. For more information take a look at `assets/app.py`and `assets/Dockerfile`.
+Create a dedicated directory for our Flask application and copy the necessary files into it. These files include `app.py`, which contains our Flask application logic, and `Dockerfile`, which defines how to build the container image. For more information take a look at [app.py][https://github.com/jsoderholm/killercoda/blob/main/tutorial/assets/app.py] and [Dockerfile][https://github.com/jsoderholm/killercoda/blob/main/tutorial/assets/Dockerfile].
 
 ```
 mkdir flask-app &&
-sudo cp /education/app.py /education/Dockerfile flask-app/
+sudo cp /assets/app.py /assets/Dockerfile flask-app/
 ```{{exec}}
 
 ---
