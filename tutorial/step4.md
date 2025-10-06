@@ -25,8 +25,8 @@ We have already prepared a provisioning file for you. We'll move this file to Gr
 Run the following command:
 
 ```
-sudo cp /education/prometheus_datasource.yml /etc/grafana/provisioning/datasources/ &&
+sudo cp /assets/prometheus_datasource.yml /etc/grafana/provisioning/datasources/ &&
 sudo systemctl restart grafana-server
 ```{{execute}}
 
-This command copies the `prometheus_datasource.yml` file into Grafana's datasource provisioning directory (`/etc/grafana/provisioning/datasources/`). When Grafana starts up, it will read this file and automatically configure the Prometheus data source.
+This command copies the `prometheus_datasource.yml` file into Grafana's datasource provisioning directory (`/etc/grafana/provisioning/datasources/`). To see the full file visit:[prometheus_datasource](https://github.com/jsoderholm/killercoda/blob/main/tutorial/assets/prometheus_datasource.yml). When Grafana starts up, it will read this file and automatically configure the Prometheus data source.

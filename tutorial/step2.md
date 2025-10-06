@@ -10,9 +10,9 @@
     tar -xvf prometheus-2.50.1.linux-amd64.tar.gz && cd prometheus-2.50.1.linux-amd64 && sudo cp prometheus /usr/local/bin
     ```{{exec}}
 
-3. Lets turn Prometheus into a service (we will do the hard work for you).
+3. Lets turn Prometheus into a service.
     ```
-    sudo useradd -rs /bin/false prometheus && sudo mkdir /etc/prometheus /var/lib/prometheus && sudo cp /education/prometheus.yml /etc/prometheus/prometheus.yml && sudo cp -r consoles/ console_libraries/ /etc/prometheus/ && sudo chown -R prometheus:prometheus /etc/prometheus /var/lib/prometheus && echo -e "[Unit]\nDescription=Prometheus\nAfter=network.target\n\n[Service]\nUser=prometheus\nGroup=prometheus\nType=simple\nExecStart=/usr/local/bin/prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/var/lib/prometheus --web.console.templates=/etc/prometheus/consoles --web.console.libraries=/etc/prometheus/console_libraries\n\n[Install]\nWantedBy=multi-user.target" | sudo tee /etc/systemd/system/prometheus.service > /dev/null && sudo systemctl daemon-reload && sudo systemctl start prometheus
+    sudo useradd -rs /bin/false prometheus && sudo mkdir /etc/prometheus /var/lib/prometheus && sudo cp /assets/prometheus.yml /etc/prometheus/prometheus.yml && sudo cp -r consoles/ console_libraries/ /etc/prometheus/ && sudo chown -R prometheus:prometheus /etc/prometheus /var/lib/prometheus && echo -e "[Unit]\nDescription=Prometheus\nAfter=network.target\n\n[Service]\nUser=prometheus\nGroup=prometheus\nType=simple\nExecStart=/usr/local/bin/prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/var/lib/prometheus --web.console.templates=/etc/prometheus/consoles --web.console.libraries=/etc/prometheus/console_libraries\n\n[Install]\nWantedBy=multi-user.target" | sudo tee /etc/systemd/system/prometheus.service > /dev/null && sudo systemctl daemon-reload && sudo systemctl start prometheus
     ```{{exec}}
 
 Let's break it down:
@@ -25,10 +25,10 @@ Adds a system account for prometheus shown by -r. Usally, a user is given a logi
 ```
 Creates necessary prometheus directories
 ```bash
-sudo cp /education/prometheus.yml /etc/prometheus/prometheus.yml
+sudo cp /assets/prometheus.yml /etc/prometheus/prometheus.yml
 sudo cp -r consoles/ console_libraries/ /etc/prometheus/
 ``` 
-Copy our config file `/education/prometheus.yml` into our directory and copy the html console templates into our directory. 
+Copy our config file `/assets/prometheus.yml` into our directory, you can find it here: [prometheus.yml](https://github.com/jsoderholm/killercoda/blob/main/tutorial/assets/prometheus.yml)(Or further down the page) and copy the html console templates into our directory. 
 ```bash
 sudo chown -R prometheus:prometheus /etc/prometheus /var/lib/prometheus 
 ```
