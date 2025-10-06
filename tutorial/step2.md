@@ -52,9 +52,12 @@ ExecStart=/usr/local/bin/prometheus \
 WantedBy=multi-user.target" \
 | sudo tee /etc/systemd/system/prometheus.service > /dev/null
 ```
-Here we create the /etc/systemd/system/prometheus.service. 
-[Unit] - creates the metadata for the service. 
-[Service] - defines how the prometheus should run. 
+Here we create the /etc/systemd/system/prometheus.service.
+
+[Unit] - creates the metadata for the service.
+
+[Service] - defines how the prometheus should run.
+ 
 [Install] - Makes prometheus start on boot. 
 ```bash
     sudo systemctl daemon-reload && sudo systemctl start prometheus
