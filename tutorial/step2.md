@@ -61,37 +61,37 @@ Here we create the /etc/systemd/system/prometheus.service.
 ```
 Then we reload the systemd configuration files and start the prometheus service.  
 4. Your `/etc/prometheus/prometheus.yml` should look like this:
-    ```
-        # my global config
-        global:
-        scrape_interval: 5s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
-        evaluation_interval: 5s # Evaluate rules every 15 seconds. The default is every 1 minute.
-        # scrape_timeout is set to the global default (10s).
+```bash
+# my global config
+global:
+scrape_interval: 5s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+evaluation_interval: 5s # Evaluate rules every 15 seconds. The default is every 1 minute.
+# scrape_timeout is set to the global default (10s).
 
-        # Alertmanager configuration
-        alerting:
-        alertmanagers:
-            - static_configs:
-                - targets:
-                # - alertmanager:9093
+# Alertmanager configuration
+alerting:
+alertmanagers:
+    - static_configs:
+        - targets:
+        # - alertmanager:9093
 
-        # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
-        rule_files:
-        # - "first_rules.yml"
-        # - "second_rules.yml"
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+# - "first_rules.yml"
+# - "second_rules.yml"
 
-        # A scrape configuration containing exactly one endpoint to scrape:
-        scrape_configs:
-        # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
-        - job_name: "cAdvisor"
+# A scrape configuration containing exactly one endpoint to scrape:
+scrape_configs:
+# The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+- job_name: "cAdvisor"
 
-            # metrics_path defaults to '/metrics'
-            # scheme defaults to 'http'.
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
 
-            static_configs:
-            - targets: ["0.0.0.0:8080"]
+    static_configs:
+    - targets: ["0.0.0.0:8080"]
 
-    ```
+```
 5. Verify Prometheus is running:
    Visit [http://localhost:9090]({{TRAFFIC_HOST1_9090}}).
    You should see the Prometheus web interface.
